@@ -54,9 +54,11 @@ resource "aws_iam_policy_attachment" "pelodata_attachment" {
 }
 
 resource "aws_lambda_permission" "pelodata_apigateway_permission" {
+    count = length(var.functions)
+
     statement_id  = "AllowAPIGatewayInvoke"
     action        = "lambda:InvokeFunction"
-    function_name = var.login_function
+    function_name = var.functions[count.index]
     principal     = "apigateway.amazonaws.com"
     source_arn    = "${var.apigateway_execution_arn}/*/*/*"
 }

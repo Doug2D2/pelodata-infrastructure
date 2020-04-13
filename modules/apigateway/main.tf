@@ -30,7 +30,7 @@ resource "aws_api_gateway_integration" "pelodata_login_integration" {
     integration_http_method = "POST"
     resource_id             = aws_api_gateway_resource.pelodata_login_resource.id
     http_method             = aws_api_gateway_method.pelodata_login_method.http_method
-    uri                     = var.lambda_invoke_arn
+    uri                     = var.login_invoke_arn
 }
 
 resource "aws_api_gateway_deployment" "pelodata_deployment" {

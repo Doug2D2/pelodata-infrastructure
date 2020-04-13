@@ -1,5 +1,5 @@
-variable "login_function" {
-    type = string
+variable "functions" {
+    type = list
 }
 
 variable "apigateway_execution_arn" {

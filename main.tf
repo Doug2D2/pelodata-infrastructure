@@ -5,7 +5,7 @@ provider "aws" {
 module "iam" {
     source = "./modules/iam"
 
-    login_function           = module.login.arn
+    functions                = [module.login.arn, module.getUserInfo.arn]
     apigateway_execution_arn = module.apigateway.execution_arn
 }
 
@@ -26,5 +26,6 @@ module "getUserInfo" {
 module "apigateway" {
     source = "./modules/apigateway"
 
-    lambda_invoke_arn = module.login.invoke_arn
+    login_invoke_arn       = module.login.invoke_arn
+    getUserInfo_invoke_arn = module.getUserInfo.invoke_arn
 }
