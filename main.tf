@@ -5,7 +5,7 @@ provider "aws" {
 module "iam" {
     source = "./modules/iam"
 
-    functions                = [module.login.arn, module.getUserInfo.arn]
+    functions                = [module.login.arn, module.getUserInfo.arn, module.getWorkouts.arn]
     apigateway_execution_arn = module.apigateway.execution_arn
 }
 
@@ -23,9 +23,17 @@ module "getUserInfo" {
     iam_role_arn = module.iam.role_arn
 }
 
+module "getWorkouts" {
+    source = "./modules/function"
+
+    name         = "getWorkouts"
+    iam_role_arn = module.iam.role_arn
+}
+
 module "apigateway" {
     source = "./modules/apigateway"
 
     login_invoke_arn       = module.login.invoke_arn
     getUserInfo_invoke_arn = module.getUserInfo.invoke_arn
+    getWorkouts_invoke_arn = module.getWorkouts.invoke_arn
 }
