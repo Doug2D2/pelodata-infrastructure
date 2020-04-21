@@ -9,3 +9,11 @@ variable "getUserInfo_invoke_arn" {
 variable "getWorkouts_invoke_arn" {
     type = string
 }
+
+variable "getFilters_invoke_arn" {
+    type = string
+}
+
+variable "getCategories_invoke_arn" {
+    type = string
+}

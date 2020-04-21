@@ -5,8 +5,14 @@ provider "aws" {
 module "iam" {
     source = "./modules/iam"
 
-    functions                = [module.login.arn, module.getUserInfo.arn, module.getWorkouts.arn]
+    functions                = [module.login.arn, module.getUserInfo.arn, 
+                                module.getWorkouts.arn, module.getFilters.arn,
+                                module.getCategories.arn]
     apigateway_execution_arn = module.apigateway.execution_arn
+}
+
+module "db" {
+    source = "./modules/db"
 }
 
 module "login" {
@@ -30,10 +36,26 @@ module "getWorkouts" {
     iam_role_arn = module.iam.role_arn
 }
 
+module "getFilters" {
+    source = "./modules/function"
+
+    name         = "getFilters"
+    iam_role_arn = module.iam.role_arn
+}
+
+module "getCategories" {
+    source = "./modules/function"
+
+    name         = "getCategories"
+    iam_role_arn = module.iam.role_arn
+}
+
 module "apigateway" {
     source = "./modules/apigateway"
 
-    login_invoke_arn       = module.login.invoke_arn
-    getUserInfo_invoke_arn = module.getUserInfo.invoke_arn
-    getWorkouts_invoke_arn = module.getWorkouts.invoke_arn
+    login_invoke_arn         = module.login.invoke_arn
+    getUserInfo_invoke_arn   = module.getUserInfo.invoke_arn
+    getWorkouts_invoke_arn   = module.getWorkouts.invoke_arn
+    getFilters_invoke_arn    = module.getFilters.invoke_arn
+    getCategories_invoke_arn = module.getCategories.invoke_arn
 }
