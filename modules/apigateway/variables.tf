@@ -17,3 +17,7 @@ variable "getFilters_invoke_arn" {
 variable "getCategories_invoke_arn" {
     type = string
 }
+
+variable "addProgram_invoke_arn" {
+    type = string
+}

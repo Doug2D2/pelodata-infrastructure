@@ -7,7 +7,7 @@ module "iam" {
 
     functions                = [module.login.arn, module.getUserInfo.arn, 
                                 module.getWorkouts.arn, module.getFilters.arn,
-                                module.getCategories.arn]
+                                module.getCategories.arn, module.addProgram.arn]
     apigateway_execution_arn = module.apigateway.execution_arn
 }
 
@@ -50,6 +50,14 @@ module "getCategories" {
     iam_role_arn = module.iam.role_arn
 }
 
+module "addProgram" {
+    source = "./modules/function"
+
+    name         = "addProgram"
+    iam_role_arn = module.iam.role_arn
+    env          = {"db_region": var.db_region, "db_name": var.db_name}
+}
+
 module "apigateway" {
     source = "./modules/apigateway"
 
@@ -58,4 +66,5 @@ module "apigateway" {
     getWorkouts_invoke_arn   = module.getWorkouts.invoke_arn
     getFilters_invoke_arn    = module.getFilters.invoke_arn
     getCategories_invoke_arn = module.getCategories.invoke_arn
+    addProgram_invoke_arn = module.addProgram.invoke_arn
 }

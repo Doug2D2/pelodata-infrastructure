@@ -6,6 +6,10 @@ resource "aws_lambda_function" "pelodata_function" {
     s3_bucket     = "pelodata-serverless"
     s3_key        = "${var.name}.zip"
 
+    environment {
+        variables = var.env
+    }
+
     tags = {
         Name = "Pelodata-${var.name}"
         App  = "Pelodata"     

@@ -37,7 +37,9 @@ resource "aws_iam_policy" "pelodata_policy" {
         "s3:ListBucket",
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:PutLogEvents",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem"
       ],
       "Effect": "Allow",
       "Resource": "*"
