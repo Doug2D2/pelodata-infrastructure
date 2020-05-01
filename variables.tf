@@ -1,7 +1,7 @@
-variable "db_region" {
+variable "table_region" {
     type = string
 }
 
-variable "db_name" {
+variable "table_name" {
     type = string
 }

@@ -149,13 +149,42 @@ resource "aws_api_gateway_integration" "pelodata_addProgram_integration" {
     uri                     = var.addProgram_invoke_arn
 }
 
+resource "aws_api_gateway_resource" "pelodata_deleteProgram_resource" {
+    path_part   = "deleteProgram"
+    parent_id   = aws_api_gateway_rest_api.pelodata_apigateway.root_resource_id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_resource" "pelodata_deleteProgramFull_resource" {
+    path_part   = "{programId}"
+    parent_id   = aws_api_gateway_resource.pelodata_deleteProgram_resource.id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_method" "pelodata_deleteProgram_method" {
+    rest_api_id   = aws_api_gateway_rest_api.pelodata_apigateway.id
+    resource_id   = aws_api_gateway_resource.pelodata_deleteProgramFull_resource.id
+    http_method   = "DELETE"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pelodata_deleteProgram_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.pelodata_apigateway.id
+    type                    = "AWS_PROXY"
+    integration_http_method = "POST"
+    resource_id             = aws_api_gateway_resource.pelodata_deleteProgramFull_resource.id
+    http_method             = aws_api_gateway_method.pelodata_deleteProgram_method.http_method
+    uri                     = var.deleteProgram_invoke_arn
+}
+
 resource "aws_api_gateway_deployment" "pelodata_deployment" {
     depends_on = [aws_api_gateway_integration.pelodata_login_integration, 
         aws_api_gateway_integration.pelodata_getUserInfo_integration,
         aws_api_gateway_integration.pelodata_getWorkouts_integration,
         aws_api_gateway_integration.pelodata_getFilters_integration,
         aws_api_gateway_integration.pelodata_getCategories_integration,
-        aws_api_gateway_integration.pelodata_addProgram_integration]
+        aws_api_gateway_integration.pelodata_addProgram_integration,
+        aws_api_gateway_integration.pelodata_deleteProgram_integration]
 
     rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
     stage_name  = "Dev"

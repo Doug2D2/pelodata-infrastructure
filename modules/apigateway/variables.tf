@@ -21,3 +21,7 @@ variable "getCategories_invoke_arn" {
 variable "addProgram_invoke_arn" {
     type = string
 }
+
+variable "deleteProgram_invoke_arn" {
+    type = string
+}

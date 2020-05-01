@@ -39,7 +39,9 @@ resource "aws_iam_policy" "pelodata_policy" {
         "logs:CreateLogStream",
         "logs:PutLogEvents",
         "dynamodb:GetItem",
-        "dynamodb:PutItem"
+        "dynamodb:Scan",
+        "dynamodb:PutItem",
+        "dynamodb:DeleteItem"
       ],
       "Effect": "Allow",
       "Resource": "*"
