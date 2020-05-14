@@ -177,6 +177,50 @@ resource "aws_api_gateway_integration" "pelodata_deleteProgram_integration" {
     uri                     = var.deleteProgram_invoke_arn
 }
 
+resource "aws_api_gateway_resource" "pelodata_getPrograms_resource" {
+    path_part   = "getPrograms"
+    parent_id   = aws_api_gateway_rest_api.pelodata_apigateway.root_resource_id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_method" "pelodata_getPrograms_method" {
+    rest_api_id   = aws_api_gateway_rest_api.pelodata_apigateway.id
+    resource_id   = aws_api_gateway_resource.pelodata_getPrograms_resource.id
+    http_method   = "GET"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pelodata_getPrograms_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.pelodata_apigateway.id
+    type                    = "AWS_PROXY"
+    integration_http_method = "POST"
+    resource_id             = aws_api_gateway_resource.pelodata_getPrograms_resource.id
+    http_method             = aws_api_gateway_method.pelodata_getPrograms_method.http_method
+    uri                     = var.getPrograms_invoke_arn
+}
+
+resource "aws_api_gateway_resource" "pelodata_getProgramsFull_resource" {
+    path_part   = "{programId}"
+    parent_id   = aws_api_gateway_resource.pelodata_getPrograms_resource.id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_method" "pelodata_getProgramsFull_method" {
+    rest_api_id   = aws_api_gateway_rest_api.pelodata_apigateway.id
+    resource_id   = aws_api_gateway_resource.pelodata_getProgramsFull_resource.id
+    http_method   = "GET"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pelodata_getProgramsFull_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.pelodata_apigateway.id
+    type                    = "AWS_PROXY"
+    integration_http_method = "POST"
+    resource_id             = aws_api_gateway_resource.pelodata_getProgramsFull_resource.id
+    http_method             = aws_api_gateway_method.pelodata_getProgramsFull_method.http_method
+    uri                     = var.getPrograms_invoke_arn
+}
+
 resource "aws_api_gateway_deployment" "pelodata_deployment" {
     depends_on = [aws_api_gateway_integration.pelodata_login_integration, 
         aws_api_gateway_integration.pelodata_getUserInfo_integration,
@@ -184,7 +228,9 @@ resource "aws_api_gateway_deployment" "pelodata_deployment" {
         aws_api_gateway_integration.pelodata_getFilters_integration,
         aws_api_gateway_integration.pelodata_getCategories_integration,
         aws_api_gateway_integration.pelodata_addProgram_integration,
-        aws_api_gateway_integration.pelodata_deleteProgram_integration]
+        aws_api_gateway_integration.pelodata_deleteProgram_integration,
+        aws_api_gateway_integration.pelodata_getPrograms_integration,
+        aws_api_gateway_integration.pelodata_getProgramsFull_integration]
 
     rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
     stage_name  = "Dev"

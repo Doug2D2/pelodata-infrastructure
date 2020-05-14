@@ -25,3 +25,7 @@ variable "addProgram_invoke_arn" {
 variable "deleteProgram_invoke_arn" {
     type = string
 }
+
+variable "getPrograms_invoke_arn" {
+    type = string
+}

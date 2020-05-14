@@ -8,7 +8,7 @@ module "iam" {
     functions                = [module.login.arn, module.getUserInfo.arn, 
                                 module.getWorkouts.arn, module.getFilters.arn,
                                 module.getCategories.arn, module.addProgram.arn,
-                                module.deleteProgram.arn]
+                                module.deleteProgram.arn, module.getPrograms.arn]
     apigateway_execution_arn = module.apigateway.execution_arn
 }
 
@@ -67,6 +67,14 @@ module "deleteProgram" {
     env          = {"table_region": var.table_region, "table_name": var.table_name}
 }
 
+module "getPrograms" {
+    source = "./modules/function"
+
+    name         = "getPrograms"
+    iam_role_arn = module.iam.role_arn
+    env          = {"table_region": var.table_region, "table_name": var.table_name}
+}
+
 module "apigateway" {
     source = "./modules/apigateway"
 
@@ -77,4 +85,5 @@ module "apigateway" {
     getCategories_invoke_arn = module.getCategories.invoke_arn
     addProgram_invoke_arn    = module.addProgram.invoke_arn
     deleteProgram_invoke_arn = module.deleteProgram.invoke_arn 
+    getPrograms_invoke_arn   = module.getPrograms.invoke_arn 
 }
