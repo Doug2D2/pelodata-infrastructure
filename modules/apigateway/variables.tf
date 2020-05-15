@@ -29,3 +29,7 @@ variable "deleteProgram_invoke_arn" {
 variable "getPrograms_invoke_arn" {
     type = string
 }
+
+variable "recommendClass_invoke_arn" {
+    type = string
+}

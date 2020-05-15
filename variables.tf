@@ -2,6 +2,10 @@ variable "table_region" {
     type = string
 }
 
-variable "table_name" {
+variable "customProgram_table_name" {
+    type = string
+}
+
+variable "recommendation_table_name" {
     type = string
 }

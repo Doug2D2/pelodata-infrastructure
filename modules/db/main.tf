@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "pelodata_custom_programs" {
-    name           = "PelodataCustomPrograms"
+    name           = "Pelodata${var.tableName}"
     hash_key       = "Id"
     write_capacity = 5
     read_capacity  = 5
@@ -10,7 +10,7 @@ resource "aws_dynamodb_table" "pelodata_custom_programs" {
     }
     
     tags = {
-        Name = "Pelodata-DB"
+        Name = "Pelodata${var.tableName}-Table"
         App  = "Pelodata"   
     }
 }

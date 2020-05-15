@@ -1,0 +1,3 @@
+variable "tableName" {
+    type = string
+}
