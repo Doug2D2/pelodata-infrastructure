@@ -243,6 +243,34 @@ resource "aws_api_gateway_integration" "pelodata_recommendClass_integration" {
     uri                     = var.recommendClass_invoke_arn
 }
 
+resource "aws_api_gateway_resource" "pelodata_deleteRecommendation_resource" {
+    path_part   = "deleteRecommendation"
+    parent_id   = aws_api_gateway_rest_api.pelodata_apigateway.root_resource_id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_resource" "pelodata_deleteRecommendationFull_resource" {
+    path_part   = "{recommendationId}"
+    parent_id   = aws_api_gateway_resource.pelodata_deleteRecommendation_resource.id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_method" "pelodata_deleteRecommendation_method" {
+    rest_api_id   = aws_api_gateway_rest_api.pelodata_apigateway.id
+    resource_id   = aws_api_gateway_resource.pelodata_deleteRecommendationFull_resource.id
+    http_method   = "DELETE"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pelodata_deleteRecommendation_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.pelodata_apigateway.id
+    type                    = "AWS_PROXY"
+    integration_http_method = "POST"
+    resource_id             = aws_api_gateway_resource.pelodata_deleteRecommendationFull_resource.id
+    http_method             = aws_api_gateway_method.pelodata_deleteRecommendation_method.http_method
+    uri                     = var.deleteRecommendation_invoke_arn
+}
+
 resource "aws_api_gateway_deployment" "pelodata_deployment" {
     depends_on = [aws_api_gateway_integration.pelodata_login_integration, 
         aws_api_gateway_integration.pelodata_getUserInfo_integration,
