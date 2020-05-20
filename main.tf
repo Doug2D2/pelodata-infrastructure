@@ -9,7 +9,8 @@ module "iam" {
                                 module.getWorkouts.arn, module.getFilters.arn,
                                 module.getCategories.arn, module.addProgram.arn,
                                 module.deleteProgram.arn, module.getPrograms.arn,
-                                module.recommendClass.arn, module.deleteRecommendation.arn]
+                                module.recommendClass.arn, module.deleteRecommendation.arn,
+                                module.getRecommendations.arn]
     apigateway_execution_arn = module.apigateway.execution_arn
 }
 
@@ -100,6 +101,14 @@ module "deleteRecommendation" {
     env          = {"table_region": var.table_region, "table_name": var.recommendation_table_name}
 }
 
+module "getRecommendations" {
+    source = "./modules/function"
+
+    name         = "getRecommendations"
+    iam_role_arn = module.iam.role_arn
+    env          = {"table_region": var.table_region, "table_name": var.recommendation_table_name}
+}
+
 module "apigateway" {
     source = "./modules/apigateway"
 
@@ -113,4 +122,5 @@ module "apigateway" {
     getPrograms_invoke_arn          = module.getPrograms.invoke_arn 
     recommendClass_invoke_arn       = module.recommendClass.invoke_arn
     deleteRecommendation_invoke_arn = module.deleteRecommendation.invoke_arn
+    getRecommendations_invoke_arn   = module.getRecommendations.invoke_arn
 }
