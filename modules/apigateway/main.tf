@@ -294,7 +294,7 @@ resource "aws_api_gateway_integration" "pelodata_getRecommendations_integration"
 }
 
 resource "aws_api_gateway_resource" "pelodata_getRecommendationsFull_resource" {
-    path_part   = "{programId}"
+    path_part   = "{recommendationId}"
     parent_id   = aws_api_gateway_resource.pelodata_getRecommendations_resource.id
     rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
 }
