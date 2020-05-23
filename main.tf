@@ -10,7 +10,8 @@ module "iam" {
                                 module.getCategories.arn, module.addProgram.arn,
                                 module.deleteProgram.arn, module.getPrograms.arn,
                                 module.recommendClass.arn, module.deleteRecommendation.arn,
-                                module.getRecommendations.arn, module.addChallenge.arn]
+                                module.getRecommendations.arn, module.addChallenge.arn,
+                                module.getChallenges.arn]
     apigateway_execution_arn = module.apigateway.execution_arn
 }
 
@@ -123,6 +124,14 @@ module "addChallenge" {
     env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name}
 }
 
+module "getChallenges" {
+    source = "./modules/function"
+
+    name         = "getChallenges"
+    iam_role_arn = module.iam.role_arn
+    env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name}
+}
+
 module "apigateway" {
     source = "./modules/apigateway"
 
@@ -138,4 +147,5 @@ module "apigateway" {
     deleteRecommendation_invoke_arn = module.deleteRecommendation.invoke_arn
     getRecommendations_invoke_arn   = module.getRecommendations.invoke_arn
     addChallenge_invoke_arn         = module.addChallenge.invoke_arn
+    getChallenges_invoke_arn        = module.getChallenges.invoke_arn
 }

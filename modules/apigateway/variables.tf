@@ -45,3 +45,7 @@ variable "getRecommendations_invoke_arn" {
 variable "addChallenge_invoke_arn" {
     type = string
 }
+
+variable "getChallenges_invoke_arn" {
+    type = string
+}

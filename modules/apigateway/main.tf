@@ -337,6 +337,50 @@ resource "aws_api_gateway_integration" "pelodata_addChallenge_integration" {
     uri                     = var.addChallenge_invoke_arn
 }
 
+resource "aws_api_gateway_resource" "pelodata_getChallenges_resource" {
+    path_part   = "getChallenges"
+    parent_id   = aws_api_gateway_rest_api.pelodata_apigateway.root_resource_id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_method" "pelodata_getChallenges_method" {
+    rest_api_id   = aws_api_gateway_rest_api.pelodata_apigateway.id
+    resource_id   = aws_api_gateway_resource.pelodata_getChallenges_resource.id
+    http_method   = "GET"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pelodata_getChallenges_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.pelodata_apigateway.id
+    type                    = "AWS_PROXY"
+    integration_http_method = "POST"
+    resource_id             = aws_api_gateway_resource.pelodata_getChallenges_resource.id
+    http_method             = aws_api_gateway_method.pelodata_getChallenges_method.http_method
+    uri                     = var.getChallenges_invoke_arn
+}
+
+resource "aws_api_gateway_resource" "pelodata_getChallengesFull_resource" {
+    path_part   = "{challengeId}"
+    parent_id   = aws_api_gateway_resource.pelodata_getChallenges_resource.id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_method" "pelodata_getChallengesFull_method" {
+    rest_api_id   = aws_api_gateway_rest_api.pelodata_apigateway.id
+    resource_id   = aws_api_gateway_resource.pelodata_getChallengesFull_resource.id
+    http_method   = "GET"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pelodata_getChallengesFull_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.pelodata_apigateway.id
+    type                    = "AWS_PROXY"
+    integration_http_method = "POST"
+    resource_id             = aws_api_gateway_resource.pelodata_getChallengesFull_resource.id
+    http_method             = aws_api_gateway_method.pelodata_getChallengesFull_method.http_method
+    uri                     = var.getChallenges_invoke_arn
+}
+
 resource "aws_api_gateway_deployment" "pelodata_deployment" {
     depends_on = [aws_api_gateway_integration.pelodata_login_integration, 
         aws_api_gateway_integration.pelodata_getUserInfo_integration,
@@ -351,7 +395,9 @@ resource "aws_api_gateway_deployment" "pelodata_deployment" {
         aws_api_gateway_integration.pelodata_deleteRecommendation_integration,
         aws_api_gateway_integration.pelodata_getRecommendations_integration,
         aws_api_gateway_integration.pelodata_getRecommendationsFull_integration,
-        aws_api_gateway_integration.pelodata_addChallenge_integration]
+        aws_api_gateway_integration.pelodata_addChallenge_integration,
+        aws_api_gateway_integration.pelodata_getChallenges_integration,
+        aws_api_gateway_integration.pelodata_getChallengesFull_integration]
 
     rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
     stage_name  = "Dev"
