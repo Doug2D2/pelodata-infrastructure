@@ -337,6 +337,34 @@ resource "aws_api_gateway_integration" "pelodata_addChallenge_integration" {
     uri                     = var.addChallenge_invoke_arn
 }
 
+resource "aws_api_gateway_resource" "pelodata_deleteChallenge_resource" {
+    path_part   = "deleteChallenge"
+    parent_id   = aws_api_gateway_rest_api.pelodata_apigateway.root_resource_id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_resource" "pelodata_deleteChallengeFull_resource" {
+    path_part   = "{challengeId}"
+    parent_id   = aws_api_gateway_resource.pelodata_deleteChallenge_resource.id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_method" "pelodata_deleteChallenge_method" {
+    rest_api_id   = aws_api_gateway_rest_api.pelodata_apigateway.id
+    resource_id   = aws_api_gateway_resource.pelodata_deleteChallengeFull_resource.id
+    http_method   = "DELETE"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pelodata_deleteChallenge_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.pelodata_apigateway.id
+    type                    = "AWS_PROXY"
+    integration_http_method = "POST"
+    resource_id             = aws_api_gateway_resource.pelodata_deleteChallengeFull_resource.id
+    http_method             = aws_api_gateway_method.pelodata_deleteChallenge_method.http_method
+    uri                     = var.deleteChallenge_invoke_arn
+}
+
 resource "aws_api_gateway_resource" "pelodata_getChallenges_resource" {
     path_part   = "getChallenges"
     parent_id   = aws_api_gateway_rest_api.pelodata_apigateway.root_resource_id
@@ -396,6 +424,7 @@ resource "aws_api_gateway_deployment" "pelodata_deployment" {
         aws_api_gateway_integration.pelodata_getRecommendations_integration,
         aws_api_gateway_integration.pelodata_getRecommendationsFull_integration,
         aws_api_gateway_integration.pelodata_addChallenge_integration,
+        aws_api_gateway_integration.pelodata_deleteChallenge_integration,
         aws_api_gateway_integration.pelodata_getChallenges_integration,
         aws_api_gateway_integration.pelodata_getChallengesFull_integration]
 

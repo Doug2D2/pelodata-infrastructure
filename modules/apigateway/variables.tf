@@ -49,3 +49,7 @@ variable "addChallenge_invoke_arn" {
 variable "getChallenges_invoke_arn" {
     type = string
 }
+
+variable "deleteChallenge_invoke_arn" {
+    type = string
+}
