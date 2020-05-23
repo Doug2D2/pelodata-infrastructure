@@ -9,3 +9,7 @@ variable "customProgram_table_name" {
 variable "recommendation_table_name" {
     type = string
 }
+
+variable "customChallenge_table_name" {
+    type = string
+}

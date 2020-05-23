@@ -315,6 +315,28 @@ resource "aws_api_gateway_integration" "pelodata_getRecommendationsFull_integrat
     uri                     = var.getRecommendations_invoke_arn
 }
 
+resource "aws_api_gateway_resource" "pelodata_addChallenge_resource" {
+    path_part   = "addChallenge"
+    parent_id   = aws_api_gateway_rest_api.pelodata_apigateway.root_resource_id
+    rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
+}
+
+resource "aws_api_gateway_method" "pelodata_addChallenge_method" {
+    rest_api_id   = aws_api_gateway_rest_api.pelodata_apigateway.id
+    resource_id   = aws_api_gateway_resource.pelodata_addChallenge_resource.id
+    http_method   = "POST"
+    authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pelodata_addChallenge_integration" {
+    rest_api_id             = aws_api_gateway_rest_api.pelodata_apigateway.id
+    type                    = "AWS_PROXY"
+    integration_http_method = "POST"
+    resource_id             = aws_api_gateway_resource.pelodata_addChallenge_resource.id
+    http_method             = aws_api_gateway_method.pelodata_addChallenge_method.http_method
+    uri                     = var.addChallenge_invoke_arn
+}
+
 resource "aws_api_gateway_deployment" "pelodata_deployment" {
     depends_on = [aws_api_gateway_integration.pelodata_login_integration, 
         aws_api_gateway_integration.pelodata_getUserInfo_integration,
@@ -328,7 +350,8 @@ resource "aws_api_gateway_deployment" "pelodata_deployment" {
         aws_api_gateway_integration.pelodata_recommendClass_integration,
         aws_api_gateway_integration.pelodata_deleteRecommendation_integration,
         aws_api_gateway_integration.pelodata_getRecommendations_integration,
-        aws_api_gateway_integration.pelodata_getRecommendationsFull_integration]
+        aws_api_gateway_integration.pelodata_getRecommendationsFull_integration,
+        aws_api_gateway_integration.pelodata_addChallenge_integration]
 
     rest_api_id = aws_api_gateway_rest_api.pelodata_apigateway.id
     stage_name  = "Dev"
