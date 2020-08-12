@@ -53,3 +53,11 @@ variable "getChallenges_invoke_arn" {
 variable "deleteChallenge_invoke_arn" {
     type = string
 }
+
+variable "bookmarkClass_invoke_arn" {
+    type = string
+}
+
+variable "unbookmarkClass_invoke_arn" {
+    type = string
+}

@@ -11,7 +11,8 @@ module "iam" {
                                 module.deleteProgram.arn, module.getPrograms.arn,
                                 module.recommendClass.arn, module.deleteRecommendation.arn,
                                 module.getRecommendations.arn, module.addChallenge.arn,
-                                module.deleteChallenge.arn, module.getChallenges.arn]
+                                module.deleteChallenge.arn, module.getChallenges.arn,
+                                module.bookmarkClass.arn, module.unbookmarkClass.arn]
     apigateway_execution_arn = module.apigateway.execution_arn
 }
 
@@ -140,6 +141,20 @@ module "getChallenges" {
     env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name}
 }
 
+module "bookmarkClass" {
+    source = "./modules/function"
+
+    name         = "bookmarkClass"
+    iam_role_arn = module.iam.role_arn
+}
+
+module "unbookmarkClass" {
+    source = "./modules/function"
+
+    name         = "unbookmarkClass"
+    iam_role_arn = module.iam.role_arn
+}
+
 module "apigateway" {
     source = "./modules/apigateway"
 
@@ -157,4 +172,6 @@ module "apigateway" {
     addChallenge_invoke_arn         = module.addChallenge.invoke_arn
     deleteChallenge_invoke_arn      = module.deleteChallenge.invoke_arn
     getChallenges_invoke_arn        = module.getChallenges.invoke_arn
+    bookmarkClass_invoke_arn        = module.bookmarkClass.invoke_arn
+    unbookmarkClass_invoke_arn      = module.unbookmarkClass.invoke_arn
 }
