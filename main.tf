@@ -2,6 +2,10 @@ provider "aws" {
     region = "us-east-1"
 }
 
+locals {
+    table_endpoint = "dynamodb.${var.table_region}.amazonaws.com"
+}
+
 module "iam" {
     source = "./modules/iam"
 
@@ -74,7 +78,7 @@ module "addProgram" {
 
     name         = "addProgram"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.customProgram_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.customProgram_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "deleteProgram" {
@@ -82,7 +86,7 @@ module "deleteProgram" {
 
     name         = "deleteProgram"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.customProgram_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.customProgram_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "getPrograms" {
@@ -90,7 +94,7 @@ module "getPrograms" {
 
     name         = "getPrograms"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.customProgram_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.customProgram_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "recommendClass" {
@@ -98,7 +102,7 @@ module "recommendClass" {
 
     name         = "recommendClass"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.recommendation_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.recommendation_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "deleteRecommendation" {
@@ -106,7 +110,7 @@ module "deleteRecommendation" {
 
     name         = "deleteRecommendation"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.recommendation_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.recommendation_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "getRecommendations" {
@@ -114,7 +118,7 @@ module "getRecommendations" {
 
     name         = "getRecommendations"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.recommendation_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.recommendation_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "addChallenge" {
@@ -122,7 +126,7 @@ module "addChallenge" {
 
     name         = "addChallenge"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "deleteChallenge" {
@@ -130,7 +134,7 @@ module "deleteChallenge" {
 
     name         = "deleteChallenge"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "getChallenges" {
@@ -138,7 +142,7 @@ module "getChallenges" {
 
     name         = "getChallenges"
     iam_role_arn = module.iam.role_arn
-    env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name}
+    env          = {"table_region": var.table_region, "table_name": var.customChallenge_table_name, "table_endpoint": local.table_endpoint}
 }
 
 module "bookmarkClass" {
